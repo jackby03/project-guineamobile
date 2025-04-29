@@ -1,7 +1,7 @@
 [project]
 name = "guinea"
 version = "0.1.0"
-description = "Add your description here"
+description = "Hexagonal Architecture + CQRS implementation in Python. Domain-centric, testable, and decoupled from frameworks.  "
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
