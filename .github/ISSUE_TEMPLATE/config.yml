@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a Bug
+    url: https://github.com/jackby03/project-guineamobile/issues/new?template=bug_report.yml
+    about: Use this template to report a bug.
+  - name: Feature Request
+    url: https://github.com/jackby03/project-guineamobile/issues/new?template=feature_request.yml
+    about: Use this template to suggest a new feature.
