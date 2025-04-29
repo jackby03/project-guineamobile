@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ./config/
+    volumes:
+      - ./config/tmp:/usr/src/app/tmp
+    ports:
+      - "8080:8000"
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - rabbitmq
+  postgres:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672" # Management UI
+      - "5672:5672"   # AMQP protocol
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
