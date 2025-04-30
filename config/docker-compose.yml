@@ -1,4 +1,5 @@
-version: '3.8'
+# Docker Compose - Development Local Environment
+name: dev-local-env
 services:
   postgres:
     image: postgres:latest

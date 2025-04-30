@@ -1,4 +1,4 @@
-from infraestructure.schema import BaseM, Out
+from infraestructure.schemas import BaseM, Out
 
 
 def exit_json(state: int, data: dict) -> BaseM:

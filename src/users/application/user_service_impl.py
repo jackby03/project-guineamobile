@@ -1,5 +1,6 @@
 from domain.models.use_cases import GetUserByIdQuery
-from infraestructure import UserFindSchema, UserRepository
+from infraestructure.repositories.user_repository import UserRepository
+from infraestructure.schemas import UserFindSchema
 
 from shared import exit_json
 from shared.infraestructure.schemas import get_db
@@ -7,7 +8,7 @@ from shared.infraestructure.schemas import get_db
 db = next(get_db())
 
 
-class UserServiceImpl:
+class UserServiceProvider:
     def __init__(self, db_session=db):
         self.user_repository = UserRepository(db_session)
 

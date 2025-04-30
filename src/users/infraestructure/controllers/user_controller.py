@@ -1,9 +1,19 @@
-from application import UserServiceImpl
+from application import UserServiceProvider
 from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-service = UserServiceImpl()
+service = UserServiceProvider()
+
+
+@router.get("/", response_model=list[dict], status_code=status.HTTP_200_OK)
+async def test():
+    """
+    Test endpoint to check if the service is running.
+    Returns:
+        A simple message indicating the service is running.
+    """
+    return {"message": "User service is running"}
 
 
 @router.get("/{user_id}", response_model=dict, status_code=status.HTTP_200_OK)

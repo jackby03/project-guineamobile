@@ -1,3 +1,3 @@
-from .user_service_impl import UserServiceImpl
+from .user_service_impl import UserServiceProvider
 
-__all__ = ["UserServiceImpl"]
+__all__ = ["UserServiceProvider"]
