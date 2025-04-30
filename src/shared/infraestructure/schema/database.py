@@ -60,7 +60,6 @@ def close_db_connection(connection: Connection) -> None:
         if connection and not connection.closed:
             connection.close()
     except SQLAlchemyError:
-        # Log error but don't raise - connection might already be closed
         pass
 
 
