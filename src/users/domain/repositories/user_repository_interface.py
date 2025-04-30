@@ -1,25 +1,32 @@
 from abc import ABCMeta, abstractmethod
 
+from src.users.domain.models import User
 
-class UserRepositoryInterface:
-    __metaclass__ = ABCMeta
+
+class UserRepositoryInterface(metaclass=ABCMeta):
+    """
+    Abstract repository interface for user data access in the domain layer.
+    This interface defines the contract for user data operations.
+    """
 
     @abstractmethod
-    def get_user_by_id(self, user_id: str) -> dict:
-        """Get user by ID."""
+    async def get_user_by_id(self, user_id: str) -> User:
+        """
+        Get user by ID from the system.
+        Args:
+            user_id: Unique identifier of the user.
+        Returns:
+            Dictionary representing the found user.
+        """
         pass
 
     @abstractmethod
-    def create_user(self, user_data: dict) -> dict:
-        """Create a new user."""
-        pass
-
-    @abstractmethod
-    def update_user(self, user_id: str, user_data: dict) -> dict:
-        """Update an existing user."""
-        pass
-
-    @abstractmethod
-    def delete_user(self, user_id: str) -> bool:
-        """Delete a user."""
+    async def create_user(self, user: User) -> User:
+        """
+        Create a new user in the system.
+        Args:
+            user_data: Dictionary containing user data.
+        Returns:
+            Dictionary representing the created user.
+        """
         pass
