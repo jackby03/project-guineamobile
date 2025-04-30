@@ -1,11 +1,10 @@
 from typing import Any, Type, Coroutine
 
-from src.users.domain.models.entities.user import User
 from ...domain.models.entities.user import User
 from ...domain.repositories.user_repository_interface import \
     UserRepositoryInterface
 
-from ....shared.infraestructure.repositories.base_repository import BaseRepository
+from ....shared.infrastructure.repositories.base_repository import BaseRepository
 
 
 class UserRepository(BaseRepository, UserRepositoryInterface):

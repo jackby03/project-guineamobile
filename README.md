@@ -64,10 +64,10 @@ pytest --cov=src/contexts/users/domain
 
 ## 🌐 API Endpoints
 
-| Endpoint        | Method | Description                     |
-|----------------|--------|---------------------------------|
-| `/users`       | POST   | Create user (async command)     |
-| `/users/{id}`  | GET    | Get user by ID (direct query)   |
+| Endpoint      | Method | Description                   |
+|---------------|--------|-------------------------------|
+| `/users`      | POST   | Create user (async command)   |
+| `/users/{id}` | GET    | Get user by ID (direct query) |
 
 ## 📜 Architectural Decisions
 - Why Hexagonal?

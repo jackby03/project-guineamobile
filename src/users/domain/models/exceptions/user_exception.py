@@ -1,4 +1,4 @@
-from shared.domain.base_exceptions import BadRequestException
+from .....shared.domain.base_exceptions import BadRequestException
 
 
 class UserNotFoundError(BadRequestException):
