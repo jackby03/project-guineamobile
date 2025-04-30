@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "dotenv>=0.9.9",
+    "psycopg2-binary>=2.9.6",
     "fastapi[standard]>=0.115.12",
     "flake8>=7.2.0",
     "pytest>=8.3.5",
@@ -20,4 +21,7 @@ extend-ignore = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = [
+    ".",
+    "src"
+]

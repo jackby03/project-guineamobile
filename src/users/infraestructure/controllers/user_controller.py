@@ -7,7 +7,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 service = UserServiceProvider()
 
 
-@router.get("/", response_model=list[dict], status_code=status.HTTP_200_OK)
+@router.get("/", response_model=dict, status_code=status.HTTP_200_OK)
 async def test():
     """
     Test endpoint to check if the service is running.
