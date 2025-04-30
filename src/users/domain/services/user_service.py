@@ -1,8 +1,10 @@
 from abc import ABCMeta, abstractmethod
 
-from domain.models import User
-from domain.models.use_cases import CreateUserCommand, GetUserByIdQuery
-from services import UserCommandService, UserQueryService
+from domain.models.entities.user import User
+from domain.models.use_cases.commands.create_user import CreateUserCommand
+from domain.models.use_cases.queries.get_user_by_id import GetUserByIdQuery
+from services.user_command_service import UserCommandService
+from services.user_query_service import UserQueryService
 
 
 class UserService(UserCommandService, UserQueryService, metaclass=ABCMeta):

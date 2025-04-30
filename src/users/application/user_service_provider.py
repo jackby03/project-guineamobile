@@ -1,9 +1,9 @@
-from domain.models.use_cases import GetUserByIdQuery
-from infraestructure.repositories.user_repository import UserRepository
-from infraestructure.schemas import UserFindSchema
+from ...shared.application.helpers import exit_json
+from ...shared.infraestructure.schemas.database import get_db
 
-from shared import exit_json
-from shared.infraestructure.schemas import get_db
+from ..domain.models.use_cases.queries.get_user_by_id import GetUserByIdQuery
+from ..infraestructure.repositories.user_repository import UserRepository
+from ..infraestructure.schemas.user_schema import UserFindSchema
 
 db = next(get_db())
 

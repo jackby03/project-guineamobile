@@ -1,9 +1,9 @@
 import os
 
+from db_schema import DatabaseConfig
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, declarative_base, sessionmaker
-
-from shared.infraestructure.schema import DatabaseConfig
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 

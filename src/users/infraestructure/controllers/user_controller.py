@@ -1,5 +1,6 @@
-from application import UserServiceProvider
 from fastapi import APIRouter, HTTPException, status
+
+from ....users.application.user_service_provider import UserServiceProvider
 
 router = APIRouter(prefix="/users", tags=["users"])
 

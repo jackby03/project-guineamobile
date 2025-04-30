@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
-from shared.infraestructure import RoutesManager
+from shared.infraestructure.routes.routes_manager import RoutesManager
 
 app = FastAPI(
     title="User Service API",
@@ -30,4 +30,4 @@ async def redirect_to_docs():
 
 
 routes_manager = RoutesManager(app)
-routes_manager.include_routes()
+routes_manager.include_router()

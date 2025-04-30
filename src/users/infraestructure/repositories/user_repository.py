@@ -1,12 +1,16 @@
-from domain.models.entities import User
-from domain.repositories import UserRepositoryInterface
+from typing import Any, Type, Coroutine
 
-from shared.infraestructure.repositories import BaseRepository
+from src.users.domain.models.entities.user import User
+from ...domain.models.entities.user import User
+from ...domain.repositories.user_repository_interface import \
+    UserRepositoryInterface
+
+from ....shared.infraestructure.repositories.base_repository import BaseRepository
 
 
 class UserRepository(BaseRepository, UserRepositoryInterface):
 
-    async def get_user_by_id(self, user_id: str) -> User:
+    async def get_user_by_id(self, user_id: str) -> Coroutine[Any, Any, Type[User] | None]:
         """
         Get user by ID from the database.
         Args:
@@ -22,13 +26,13 @@ class UserRepository(BaseRepository, UserRepositoryInterface):
         """
         Create a new user in the database.
         Args:
-            user_data: User object containing user data.
+            user: User object containing user data.
         Returns:
             User object representing the created user.
         Raises:
             ValueError: If the user already exists or if there is an error
             during creation.
         """
-        self.db_session.add(user)
-        self.db_session.commit()
+        self.db_connection.add(user)
+        self.db_connection.commit()
         return user
