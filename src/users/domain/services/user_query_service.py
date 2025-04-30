@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from ..models import User
-from ..models.use_cases.queries import GetUserByIdQuery
+from domain.models import GetUserByIdQuery, User
 
 
 class UserQueryService(metaclass=ABCMeta):

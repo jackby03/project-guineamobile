@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from src.users.domain.models import User
+from domain.models import User
 
 
 class UserRepositoryInterface(metaclass=ABCMeta):
@@ -10,7 +10,7 @@ class UserRepositoryInterface(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    async def get_user_by_id(self, user_id: str) -> User:
+    def get_user_by_id(self, user_id: str) -> User:
         """
         Get user by ID from the system.
         Args:
@@ -21,7 +21,7 @@ class UserRepositoryInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    async def create_user(self, user: User) -> User:
+    def create_user(self, user: User) -> User:
         """
         Create a new user in the system.
         Args:

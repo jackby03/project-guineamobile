@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from ..models import User
-from ..models.use_cases.commands import CreateUserCommand
+from domain.models import CreateUserCommand, User
 
 
 class UserCommandService(metaclass=ABCMeta):
