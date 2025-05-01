@@ -1,10 +1,10 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 
 class UserSchema(BaseModel):
     name: str
-    email: EmailStr
+    email: str
 
 
-class UserFindSchema(BaseModel):
-    id_user: str
+class UserFindSchema(UserSchema):
+    user_id: int

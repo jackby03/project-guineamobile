@@ -1,16 +1,17 @@
-from dataclasses import dataclass
+from sqlalchemy import Column, Integer, String
+
+from src.shared.infrastructure.schemas.database import Base
 
 
-@dataclass
-class User:
-    id: str
-    name: str
-    email: str
+class User(Base):
+    __tablename__ = "tb_users"
 
-    def __post_init__(self):
-        if not self.id:
-            raise ValueError("User ID cannot be empty.")
-        if not self.name:
-            raise ValueError("User name cannot be empty.")
-        if not self.email:
-            raise ValueError("User email cannot be empty.")
+    user_id: int = Column(Integer,
+                          primary_key=True,
+                          index=True,
+                          autoincrement=True)
+    name: str = Column(String, nullable=False)
+    email: str = Column(String, nullable=False, unique=True)
+
+    def __repr__(self):
+        return f"User(user_id={self.user_id}, name={self.name})"

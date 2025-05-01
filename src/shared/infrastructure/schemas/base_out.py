@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel
 
@@ -13,4 +13,4 @@ class Out:
 class BaseM(BaseModel):
     state: int
     msg: str
-    date: Any
+    data: Optional[Any] = None

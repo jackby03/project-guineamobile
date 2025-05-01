@@ -10,7 +10,7 @@ class UserRepositoryInterface(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_user_by_id(self, user_id: str) -> User:
+    async def get_user_by_id(self, user_id: int) -> User:
         """
         Get user by ID from the system.
         Args:
@@ -21,11 +21,11 @@ class UserRepositoryInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def create_user(self, user: User) -> User:
+    async def save_user(self, user: User) -> User:
         """
         Create a new user in the system.
         Args:
-            user_data: Dictionary containing user data.
+            user: Dictionary containing user data.
         Returns:
             Dictionary representing the created user.
         """

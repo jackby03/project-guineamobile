@@ -1,30 +1,51 @@
 from ...shared.application.helpers import exit_json
-from ...shared.infrastructure.schemas.database import get_db
-
-from ..domain.models.use_cases.queries.get_user_by_id import GetUserByIdQuery
 from ..infraestructure.repositories.user_repository import UserRepository
-from ..infraestructure.schemas.user_schema import UserFindSchema
-
-db = next(get_db())
+from ..infraestructure.schemas.user_schema import UserFindSchema, UserSchema
+from .use_cases.commands.register_user import RegisterUserUseCase
+from .use_cases.queries.get_user_by_id import GetUserByIdUseCase
 
 
 class UserServiceProvider:
-    def __init__(self, db_session=db):
+    def __init__(self, db_session):
         self.user_repository = UserRepository(db_session)
 
-    async def get_user_by_id(self, user_id: str):
+    async def register_user(self, data_user: UserSchema):
         try:
-            use_case = GetUserByIdQuery(self.user_repository)
+            use_case = RegisterUserUseCase(self.user_repository)
+            user = await use_case.execute(data_user)
+            print(user)
+            if user is None:
+                return exit_json(0, {
+                    "success": False,
+                    "message": "ERROR_REGISTER"})
+            return exit_json(
+                1,
+                {
+                    "success": True,
+                    "message": "USER_REGISTERED",
+                    "data": {
+                        "user_id": user.user_id,
+                        "name": user.name,
+                        "email": user.email,
+                    },
+                },
+            )
+        except Exception as e:
+            print("ERROR_REGISTRO", e)
+            return exit_json(0, {"success": False, "message": str(e)})
+
+    async def get_user_by_id(self, user_id: int):
+        try:
+            use_case = GetUserByIdUseCase(self.user_repository)
             user = await use_case.execute(user_id)
 
             if user is None:
-                return exit_json(0, {"message": "User not found"})
+                return exit_json(0, {"message": "USUARIO_NO_ENCONTRADO"})
 
             user_map = UserFindSchema(
-                id=user.id,
-                name=user.name,
-                email=user.email,
+                user_id=user.user_id, name=user.name, email=user.email
             )
             return exit_json(1, {"user": user_map})
         except Exception as e:
+            print("ERROR_CONSULTA", e)
             return exit_json(0, {"message": str(e)})

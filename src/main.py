@@ -23,9 +23,6 @@ app.add_middleware(
 
 @app.get("/", include_in_schema=False)
 async def redirect_to_docs():
-    """
-    Redirect to the API documentation page.
-    """
     return RedirectResponse(url="/docs")
 
 
