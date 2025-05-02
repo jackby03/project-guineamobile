@@ -1,7 +1,7 @@
 [project]
 name = "guinea"
 version = "0.1.0"
-description = "Hexagonal Architecture + CQRS implementation in Python. Domain-centric, testable, and decoupled from frameworks.  "
+description = "Hexagonal Architecture + CQRS implementation in Python. Domain-centric, testable, and decoupled from frameworks."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -18,15 +18,21 @@ dependencies = [
     "tenacity>=9.1.2",
 ]
 
-[flake8.tool]
-max-line-length = 88
-extend-ignore = [
-    "E501",
-    "W503",
-]
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 pythonpath = [
     ".",
     "src"
 ]
+addopts = "--strict-markers --tb=short"
+testpaths = ["tests"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["src"]
+known_third_party = ["fastapi", "sqlalchemy", "pydantic", "asyncpg", "passlib", "python-jose", "aio-pika", "tenacity"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
