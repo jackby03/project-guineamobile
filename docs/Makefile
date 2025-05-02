@@ -3,8 +3,8 @@
 # Variables configurables
 SPHINXOPTS    ?=
 SPHINXBUILD   = .venv\Scripts\sphinx-build
-SOURCEDIR     = docs/source
-BUILDDIR      = docs/build
+SOURCEDIR     = source
+BUILDDIR      = build
 
 # Ayuda: muestra las opciones disponibles
 help:
