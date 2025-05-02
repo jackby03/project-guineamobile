@@ -8,4 +8,4 @@ class RoutesManager:
         self.app = app
 
     def include_router(self):
-        self.app.include_router(user.router)
+        self.app.include_router(user.router, prefix="/users", tags=["users"])

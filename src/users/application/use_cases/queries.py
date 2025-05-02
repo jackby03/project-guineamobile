@@ -1,6 +1,5 @@
+from src.users.domain.repositories import UserRepositoryInterface
 from src.users.domain.user import User
-from src.users.domain.user_repository_interface import \
-    UserRepositoryInterface
 
 
 class GetUserByIdUseCase:
