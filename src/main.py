@@ -30,16 +30,32 @@ app.add_middleware(
 # --- Event Handlers ---
 @app.on_event("startup")
 async def startup_event():
+    """
+    Startup event handler.
+
+    This function is executed when the application starts. It initializes
+    the database connection and performs any necessary setup.
+
+    Returns:
+        None
+    """
     print("Starting up User Service application...")
-    # Initialize database connection and potentially create tables
     await init_db()
     print("Application startup complete.")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
+    """
+    Shutdown event handler.
+
+    This function is executed when the application shuts down. It closes
+    database connections and other resources gracefully.
+
+    Returns:
+        None
+    """
     print("Shutting down User Service application...")
-    # Close database connections gracefully
     await close_db()
     await close_rabbitmq_connection()
     print("Application shutdown complete.")
@@ -50,15 +66,19 @@ async def shutdown_event():
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """
     Handle validation exceptions for FastAPI requests.
-    This async function serves as an exception handler for RequestValidationError,
+
+    This function serves as an exception handler for `RequestValidationError`,
     returning a JSON response with validation error details.
+
     Args:
-        request (Request): The incoming HTTP request object
-        exc (RequestValidationError): The validation exception that was raised
+        request (Request): The incoming HTTP request object.
+        exc (RequestValidationError): The validation exception that was raised.
+
     Returns:
         JSONResponse: A response containing:
-            - status_code: 422 (HTTP_422_UNPROCESSABLE_ENTITY)
-            - content: Dictionary with 'detail' key containing validation errors
+            - status_code: 422 (HTTP_422_UNPROCESSABLE_ENTITY).
+            - content: Dictionary with 'detail' key containing validation errors.
+
     Example:
         When invalid data is sent:
         {
@@ -71,7 +91,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             ]
         }
     """
-
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={"detail": exc.errors()},
@@ -86,7 +105,15 @@ routes_manager.include_router()
 # --- Root Endpoint ---
 @app.get("/", include_in_schema=False)
 async def redirect_to_docs():
-    """Root endpoint providing basic app info."""
+    """
+    Root endpoint providing basic app info.
+
+    This endpoint returns basic information about the application, including
+    the environment, version, and documentation URL.
+
+    Returns:
+        dict: A dictionary containing app information.
+    """
     return {
         "message": "Welcome to the User Service API!",
         "enviroment": settings.ENVIRONMENT,

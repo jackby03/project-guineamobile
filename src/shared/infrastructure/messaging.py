@@ -16,7 +16,15 @@ _connection: Optional[AbstractRobustConnection] = None
 
 
 async def get_rabbitmq_connection() -> AbstractRobustConnection:
-    """Gets or creates the global RabbitMQ connection."""
+    """
+    Gets or creates the global RabbitMQ connection.
+
+    Returns:
+        AbstractRobustConnection: The global RabbitMQ connection instance.
+
+    Raises:
+        MessagingError: If the connection cannot be established.
+    """
     global _connection
     if _connection is None or _connection.is_closed:
         print("Attempting to create a new RabbitMQ connection.")
@@ -31,14 +39,20 @@ async def get_rabbitmq_connection() -> AbstractRobustConnection:
     retry=retry_if_exception_type(
         (ConnectionError, asyncio.TimeoutError, aio_pika.exceptions.AMQPConnectionError)
     ),
-    reraise=True,  # Reraise the exception if all retries fail
+    reraise=True,
 )
 async def connection_to_rabbitmq() -> AbstractRobustConnection:
-    """Establishes a robust connection to RabbitMQ with retries."""
+    """
+    Establishes a robust connection to RabbitMQ with retries.
+
+    Returns:
+        AbstractRobustConnection: The RabbitMQ connection instance.
+
+    Raises:
+        ConnectionError: If the connection fails after retries.
+    """
     try:
-        connection = await aio_pika.connect_robust(
-            RABBITMQ_URL, timeout=10  # Connection timeout in seconds
-        )
+        connection = await aio_pika.connect_robust(RABBITMQ_URL, timeout=10)
         connection.close_callbacks(on_connection_close)
         connection.reconnect_callbacks(on_connection_reconnect)
         return connection
@@ -54,17 +68,32 @@ async def connection_to_rabbitmq() -> AbstractRobustConnection:
 def on_connection_close(
     connection: AbstractRobustConnection, exc: Optional[BaseException]
 ):
+    """
+    Callback for when the RabbitMQ connection is closed.
+
+    Args:
+        connection (AbstractRobustConnection): The RabbitMQ connection instance.
+        exc (Optional[BaseException]): The exception that caused the closure, if any.
+    """
     print(f"RabbitMQ connection closed: {exc}")
     global _connection
     _connection = None
 
 
 def on_connection_reconnect(connection: AbstractRobustConnection):
+    """
+    Callback for when the RabbitMQ connection is reconnected.
+
+    Args:
+        connection (AbstractRobustConnection): The RabbitMQ connection instance.
+    """
     print("RabbitMQ connection reconnected")
 
 
 async def close_rabbitmq_connection():
-    """Closes the global RabbitMQ connection if it exists."""
+    """
+    Closes the global RabbitMQ connection if it exists.
+    """
     global _connection
     if _connection and not _connection.is_closed:
         await _connection.close()
@@ -75,7 +104,12 @@ async def close_rabbitmq_connection():
 async def get_rabbitmq_channel() -> AsyncGenerator[Channel, None]:
     """
     Provides a RabbitMQ channel for a request.
-    The caller is responsible for closing the channel.
+
+    Yields:
+        Channel: The RabbitMQ channel instance.
+
+    Raises:
+        MessagingError: If the channel cannot be created or used.
     """
     try:
         connection = await get_rabbitmq_connection()
@@ -94,7 +128,15 @@ async def declare_exchange(
     exchange_type: str = "direct",
     durable: bool = True,
 ):
-    """Declares an exchange."""
+    """
+    Declares an exchange in RabbitMQ.
+
+    Args:
+        channel (Channel): The RabbitMQ channel instance.
+        exchange_name (str): The name of the exchange to declare.
+        exchange_type (str, optional): The type of the exchange (e.g., "direct"). Defaults to "direct".
+        durable (bool, optional): Whether the exchange should be durable. Defaults to True.
+    """
     print(
         f"Declaring exchange: {exchange_name} (type: {exchange_type}, durable: {durable})"
     )
@@ -109,19 +151,35 @@ async def declare_queue(
     durable: bool = True,
     arguments: Optional[dict] = None,
 ):
-    """Declares a queue."""
+    """
+    Declares a queue in RabbitMQ.
+
+    Args:
+        channel (Channel): The RabbitMQ channel instance.
+        queue_name (str): The name of the queue to declare.
+        durable (bool, optional): Whether the queue should be durable. Defaults to True.
+        arguments (Optional[dict], optional): Additional arguments for the queue. Defaults to None.
+    """
     print(f"Declaring queue: {queue_name} (durable: {durable})")
     await channel.declare_queue(
         name=queue_name,
         durable=durable,
-        arguments=arguments,  # e.g., {'x-dead-letter-exchange': 'dlx_exchange'}
+        arguments=arguments,
     )
 
 
 async def bind_queue(
     channel: Channel, exchange_name: str, queue_name: str, routing_key: str = ""
 ):
-    """Binds a queue to an exchange."""
+    """
+    Binds a queue to an exchange in RabbitMQ.
+
+    Args:
+        channel (Channel): The RabbitMQ channel instance.
+        exchange_name (str): The name of the exchange.
+        queue_name (str): The name of the queue.
+        routing_key (str, optional): The routing key for the binding. Defaults to "".
+    """
     print(
         f"Binding queue '{queue_name}' to exchange '{exchange_name}' with key '{routing_key}'"
     )
@@ -137,36 +195,23 @@ async def publish_message(
     content_type: str = "application/json",
     delivery_mode: aio_pika.DeliveryMode = aio_pika.DeliveryMode.PERSISTENT,
 ):
-    """Publishes a message to an exchange."""
+    """
+    Publishes a message to an exchange in RabbitMQ.
+
+    Args:
+        channel (Channel): The RabbitMQ channel instance.
+        exchange_name (str): The name of the exchange.
+        routing_key (str): The routing key for the message.
+        body (bytes): The message body.
+        content_type (str, optional): The content type of the message. Defaults to "application/json".
+        delivery_mode (aio_pika.DeliveryMode, optional): The delivery mode of the message. Defaults to PERSISTENT.
+    """
     print(f"Publishing message to exchange '{exchange_name}' with key '{routing_key}'")
     message = aio_pika.Message(
         body=body,
         content_type=content_type,
-        delivery_mode=delivery_mode,  # Make message persistent
+        delivery_mode=delivery_mode,
     )
     exchange = await channel.get_exchange(exchange_name)
     await exchange.publish(message, routing_key=routing_key)
     print("Message published successfully.")
-
-
-# Example of setting up exchanges/queues (call this during startup or consumer setup)
-async def setup_messaging_infrastructure(channel: Channel):
-    """Sets up necessary exchanges and queues. Should be idempotent."""
-    # Example for User Commands
-    user_command_exchange = "user_commands_exchange"
-    create_user_queue = "create_user_queue"
-    create_user_routing_key = "user.command.create"
-
-    await declare_exchange(
-        channel, user_command_exchange, exchange_type="direct", durable=True
-    )
-
-    await declare_queue(channel, create_user_queue, durable=True)
-
-    await bind_queue(
-        channel, user_command_exchange, create_user_queue, create_user_routing_key
-    )
-
-    # Add declarations for other exchanges/queues (e.g., for Auth context)
-
-    print("Messaging infrastructure setup complete.")

@@ -19,7 +19,9 @@ dependencies = [
     "bcrypt<4.0.0",
     "pydantic-settings>=2.9.1",
     "jose>=1.0.0",
-    "pdoc>=15.0.3",
+    "sphinx>=8.2.3",
+    "sphinx-rtd-theme>=3.0.2",
+    "sphinxcontrib-napoleon>=0.7",
 ]
 
 [project.scripts]

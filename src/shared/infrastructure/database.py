@@ -1,7 +1,5 @@
-import os
 from typing import AsyncGenerator
 
-from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -20,15 +18,28 @@ AsyncSessionFactory = async_sessionmaker(
 
 
 class Base(DeclarativeBase):
-    """Base class for SQLAlchemy models."""
+    """
+    Base class for SQLAlchemy models.
+
+    This class serves as the base for all SQLAlchemy ORM models in the application.
+    It provides metadata and other shared functionality for database models.
+    """
 
     pass
 
 
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """
-    Dependency that provides an AsyncSession for a request.
-    Ensures the session is closed afterward.
+    Dependency that provides an `AsyncSession` for a request.
+
+    This function is used as a dependency in FastAPI to provide a database session
+    for each request. It ensures that the session is properly closed after the request.
+
+    Yields:
+        AsyncSession: The SQLAlchemy asynchronous session.
+
+    Raises:
+        Exception: If an error occurs during the session lifecycle.
     """
     async with AsyncSessionFactory() as session:
         try:
@@ -42,7 +53,18 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
 
 @async_sessionmaker
 async def db_session_manager() -> AsyncGenerator[AsyncSession, None]:
-    """Provide a session outside FastAPI dependency injection."""
+    """
+    Provides a session outside FastAPI dependency injection.
+
+    This function is useful for scenarios where a database session is needed
+    outside the context of FastAPI's dependency injection system.
+
+    Yields:
+        AsyncSession: The SQLAlchemy asynchronous session.
+
+    Raises:
+        Exception: If an error occurs during the session lifecycle.
+    """
     async with AsyncSessionFactory() as session:
         try:
             yield session
@@ -56,17 +78,16 @@ async def db_session_manager() -> AsyncGenerator[AsyncSession, None]:
 async def init_db():
     """
     Initialize the database.
-    Optionally create tables if they don't exist. (useful for dev/testing).
+
+    This function initializes the database by creating tables if they don't exist.
+    It is primarily used for development or testing purposes. In production, use
+    Alembic migrations for database schema management.
+
+    Raises:
+        Exception: If the database connection or table creation fails.
     """
-    # In a production scenario, you'd typically use Alembic migrations.
-    # This is a simplified setup.
-    # async with engine.begin() as conn:
-    #     # await conn.run_sync(Base.metadata.drop_all) # Use with caution!
-    #     await conn.run_sync(Base.metadata.create_all)
     print("Database connection initialized.")
-    # Check connection (optional)
     try:
-        # flake8: noqa: F841
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
             print("Database connection successful.")
@@ -75,6 +96,10 @@ async def init_db():
 
 
 async def close_db():
-    """Close the database engine connections."""
+    """
+    Close the database engine connections.
+
+    This function disposes of the database engine, closing all active connections.
+    """
     await engine.dispose()
     print("Database connections closed.")

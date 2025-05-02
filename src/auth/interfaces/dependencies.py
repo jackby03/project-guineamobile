@@ -19,6 +19,12 @@ def get_authenticate_user_use_case(
 ) -> AuthenticateUserUseCase:
     """
     Dependency injection for the AuthenticateUserUseCase.
+
+    Args:
+        user_repo (UserRepository): Repository instance for user-related database operations.
+
+    Returns:
+        AuthenticateUserUseCase: An instance of the AuthenticateUser use case.
     """
     return AuthenticateUserUseCase(user_repo)
 
@@ -33,34 +39,39 @@ async def get_current_user(
     user_repo: Annotated[UserRepository, Depends(get_user_repository)],
 ) -> UserModel:
     """
-    Dependency to get current authenticated user based on the token.
+    Dependency to get the current authenticated user based on the token.
+
     This function validates the provided JWT token, decodes it to extract user information,
     and retrieves the corresponding user from the database.
+
     Args:
-        token (str): JWT token obtained from the OAuth2 scheme dependency
-        user_repo (UserRepository): Repository instance for user-related database operations
+        token (str): JWT token obtained from the OAuth2 scheme dependency.
+        user_repo (UserRepository): Repository instance for user-related database operations.
+
     Returns:
-        UserModel: The authenticated user model instance
+        UserModel: The authenticated user model instance.
+
     Raises:
         HTTPException: With 401 status code if:
-            - Token is invalid or cannot be decoded
-            - Token does not contain user ID in sub claim
-            - User ID format is invalid
-            - User not found in database
-    Example:
-        ```
-        @router.get("/me")
-        async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
-            return current_user
-    """
+            - Token is invalid or cannot be decoded.
+            - Token does not contain user ID in the `sub` claim.
+            - User ID format is invalid.
+            - User not found in the database.
 
+    Example:
+        ```python
+        @router.get("/me")
+        async def read_users_me(current_user: Annotated[UserModel, Depends(get_current_user)]):
+            return current_user
+        ```
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     token_data = decode_access_token(token)
-    if token is None:
+    if token_data is None:
         print("Token decode failed or token invalid.")
         raise credentials_exception
 
@@ -79,9 +90,28 @@ async def get_current_user(
         print(f"User with ID {user_id} not found.")
         raise credentials_exception
 
-    print(f"Successfully authenticated user ID: {user.user_id} from token. ")
+    print(f"Successfully authenticated user ID: {user.user_id} from token.")
     return user
 
 
-TokenDep = Annotated[int, Depends(oauth2_scheme)]
+TokenDep = Annotated[str, Depends(oauth2_scheme)]
+"""
+Annotated type for injecting the OAuth2 token dependency.
+
+This annotation is used in FastAPI endpoints to automatically resolve and inject
+the JWT token from the request headers.
+
+Type:
+    Annotated[str, Depends(oauth2_scheme)]
+"""
+
 Current_user = Annotated[UserModel, Depends(get_current_user)]
+"""
+Annotated type for injecting the current authenticated user dependency.
+
+This annotation is used in FastAPI endpoints to automatically resolve and inject
+the authenticated user model instance.
+
+Type:
+    Annotated[UserModel, Depends(get_current_user)]
+"""

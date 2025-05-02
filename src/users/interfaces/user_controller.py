@@ -12,25 +12,57 @@ router = APIRouter()
     "/",
     response_model=dict,
     status_code=status.HTTP_200_OK,
+    summary="Health check for the User Service",
+    description="Returns a message indicating that the User Service is running.",
 )
 async def test():
+    """
+    Health check endpoint for the User Service.
+
+    This endpoint is used to verify that the User Service is running and accessible.
+
+    Returns:
+        dict: A dictionary containing a message indicating the service status.
+
+    Example:
+        >>> response = await test()
+        >>> print(response)
+        {"message": "User service is running"}
+    """
     return {"message": "User service is running"}
 
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    status_code=status.HTTP_201_CREATED,
+    summary="Register a new user",
+    description="Registers a new user in the system with the provided data.",
+)
 async def register_user(data_user: UserCreateModel, db=Depends(get_db_session)):
     """
-    Register a new user in the system.
-    Args:
-        data_user (UserCreateModel): User data model containing registration information.
-        db (Session, optional): Database session. Defaults to Depends(get_db_session).
-    Returns:
-        dict: Response containing the registered user information.
-    Raises:
-        HTTPException: 400 Bad Request if domain validation fails.
-        HTTPException: 500 Internal Server Error if an unexpected error occurs.
-    """
+    Registers a new user in the system.
 
+    This endpoint handles user registration by validating the provided data and
+    saving the user to the database.
+
+    Args:
+        data_user (UserCreateModel): The user data model containing registration details.
+        db: The database session dependency.
+
+    Returns:
+        dict: A dictionary containing the registration response.
+
+    Raises:
+        HTTPException:
+            - 400: If a domain error occurs during registration.
+            - 500: If an unexpected error occurs during registration.
+
+    Example:
+        >>> data_user = UserCreateModel(name="John Doe", email="john@example.com", password="securepassword")
+        >>> response = await register_user(data_user, db)
+        >>> print(response)
+        {"success": True, "message": "USER_REGISTERED", "data": {...}}
+    """
     try:
         service = UserServiceHandler(db)
         response = await service.register_user(data_user)
@@ -50,25 +82,36 @@ async def register_user(data_user: UserCreateModel, db=Depends(get_db_session)):
     response_model=dict,
     status_code=status.HTTP_200_OK,
     summary="Get user by ID",
+    description="Retrieves a user by their unique identifier.",
     responses={status.HTTP_404_NOT_FOUND: {"description": "User not found"}},
 )
 async def get_user_by_id(user_id: int, db=Depends(get_db_session)):
     """
-    Retrieve a user by their ID from the database.
+    Retrieves a user by their unique identifier.
+
+    This endpoint fetches a user from the database based on the provided user ID.
+
     Args:
         user_id (int): The unique identifier of the user to retrieve.
-        db (Session): Database session dependency.
+        db: The database session dependency.
+
     Returns:
-        User: The user object if found.
+        dict: A dictionary containing the user details.
+
     Raises:
         HTTPException:
-            - 404 Not Found if user doesn't exist
-            - 500 Internal Server Error if an unexpected error occurs
+            - 404: If the user is not found.
+            - 500: If an unexpected error occurs during retrieval.
+
+    Example:
+        >>> user_id = 1
+        >>> response = await get_user_by_id(user_id, db)
+        >>> print(response)
+        {"user_id": 1, "name": "John Doe", "email": "john@example.com"}
     """
     try:
         service = UserServiceHandler(db)
         user = await service.get_user_by_id(user_id)
-        print(user)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
