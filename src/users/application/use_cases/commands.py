@@ -1,7 +1,7 @@
-from src.users.domain.models.entities.user import User
-from src.users.domain.repositories.user_repository_interface import \
+from src.users.domain.user import User
+from src.users.domain.user_repository_interface import \
     UserRepositoryInterface
-from src.users.infraestructure.schemas.user_schema import UserSchema
+from src.users.infraestructure.user_schema import UserSchema
 
 
 class RegisterUserUseCase:

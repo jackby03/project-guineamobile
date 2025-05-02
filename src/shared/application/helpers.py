@@ -1,4 +1,4 @@
-from ..infrastructure.schemas.base_out import BaseM, Out
+from src.shared.domain.base_out import BaseM, Out
 
 
 def exit_json(state: int, data: dict) -> BaseM:

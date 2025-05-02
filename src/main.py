@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
-from src.shared.infrastructure.routes.routes_manager import RoutesManager
+from src.shared.infrastructure.routes_manager import RoutesManager
 
 app = FastAPI(
     title="User Service API",

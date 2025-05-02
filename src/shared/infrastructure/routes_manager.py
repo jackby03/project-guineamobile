@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from ....users.infraestructure.controllers import user_controller as user
+from src.users.interfaces import user_controller as user
 
 
 class RoutesManager:

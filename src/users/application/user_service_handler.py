@@ -1,11 +1,11 @@
 from ...shared.application.helpers import exit_json
-from ..infraestructure.repositories.user_repository import UserRepository
-from ..infraestructure.schemas.user_schema import UserFindSchema, UserSchema
-from .use_cases.commands.register_user import RegisterUserUseCase
-from .use_cases.queries.get_user_by_id import GetUserByIdUseCase
+from src.users.infraestructure.user_repository import UserRepository
+from src.users.infraestructure.user_schema import UserFindSchema, UserSchema
+from src.users.application.use_cases.commands import RegisterUserUseCase
+from src.users.application.use_cases.queries import GetUserByIdUseCase
 
 
-class UserServiceProvider:
+class UserServiceHandler:
     def __init__(self, db_session):
         self.user_repository = UserRepository(db_session)
 

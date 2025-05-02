@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from ...domain.models.entities.user import User
+from src.users.domain.user import User
 
 
 class UserRepositoryInterface(metaclass=ABCMeta):
@@ -18,7 +18,7 @@ class UserRepositoryInterface(metaclass=ABCMeta):
         Returns:
             Dictionary representing the found user.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     async def save_user(self, user: User) -> User:
@@ -29,4 +29,4 @@ class UserRepositoryInterface(metaclass=ABCMeta):
         Returns:
             Dictionary representing the created user.
         """
-        pass
+        raise NotImplementedError

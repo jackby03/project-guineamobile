@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from src.auth.domain.models.entities.credential import Credential
+from src.auth.domain.token import Credential
 
 
 class CredentialRepositoryInterface(metaclass=ABCMeta):

@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
 
-from src.shared.infrastructure.schemas.database import Base
+from src.shared.infrastructure.database import Base
 
 
 class User(Base):
@@ -13,8 +12,8 @@ class User(Base):
                           autoincrement=True)
     name: str = Column(String, nullable=False)
     email: str = Column(String, nullable=False, unique=True)
-
-    credential = relationship("Credential", back_populates="user")
+    hashed_password: str = Column(String, nullable=False)
 
     def __repr__(self):
-        return f"User(user_id={self.user_id}, name={self.name})"
+        return f"UserMode(id={self.user_id}, email='{self.email}', name='{self.name}')>"
+
