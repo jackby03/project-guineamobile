@@ -9,6 +9,6 @@ class RegisterUserUseCase:
 
     async def execute(self, command: UserModel) -> User:
         new_user = User(name=command.name, email=command.email)
-        new_user.set_password(command.hashed_password)
+        new_user.set_password(command.password)
         saved_user = await self.user_repository.save_user(new_user)
         return saved_user

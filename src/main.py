@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -59,3 +60,6 @@ async def redirect_to_docs():
 
 routes_manager = RoutesManager(app)
 routes_manager.include_router()
+
+if __name__ == "__main__":
+    uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)

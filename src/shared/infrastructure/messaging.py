@@ -4,8 +4,7 @@ import os
 import aio_pika.exceptions
 from aio_pika.abc import AbstractRobustChannel, AbstractRobustConnection
 from dotenv import load_dotenv
-from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
-                      wait_fixed)
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 from typing_extensions import AsyncGenerator, Optional, TypeAlias
 
 from src.shared.domain.base_errores import MessagingError
@@ -64,7 +63,7 @@ def on_connection_close(
 
 
 def on_connection_reconnect(connection: AbstractRobustConnection):
-    print(f"RabbitMQ connection reconnected")
+    print("RabbitMQ connection reconnected")
 
 
 async def close_rabbitmq_connection():

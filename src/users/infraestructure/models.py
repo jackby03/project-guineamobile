@@ -4,7 +4,6 @@ from pydantic import BaseModel
 class UserModel(BaseModel):
     name: str
     email: str
-    password: str
 
 
 class UserFindModel(UserModel):
@@ -12,4 +11,4 @@ class UserFindModel(UserModel):
 
 
 class UserCreateModel(UserModel):
-    pass
+    password: str

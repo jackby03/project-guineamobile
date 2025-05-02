@@ -16,7 +16,11 @@ dependencies = [
     "python-jose>=3.4.0",
     "aio-pika>=9.5.5",
     "tenacity>=9.1.2",
+    "bcrypt<4.0.0",
 ]
+
+[project.scripts]
+start = "run:src.main"
 
 [build-system]
 requires = ["setuptools", "wheel"]

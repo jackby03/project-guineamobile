@@ -2,8 +2,7 @@ import os
 from typing import AsyncGenerator
 
 from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
-                                    create_async_engine)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 load_dotenv()
@@ -65,7 +64,9 @@ async def init_db():
     print("Database connection initialized.")
     # Check connection (optional)
     try:
-        async with engine.connect() as conn:
+        # flake8: noqa: F841
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
             print("Database connection successful.")
     except Exception as e:
         print(f"Database connection failed: {e}")
