@@ -2,6 +2,7 @@ import asyncio
 import os
 
 import aio_pika.exceptions
+from aio_pika import connect_robust
 from aio_pika.abc import AbstractRobustChannel, AbstractRobustConnection
 from dotenv import load_dotenv
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
@@ -77,23 +78,18 @@ async def close_rabbitmq_connection():
 
 async def get_rabbitmq_channel() -> AsyncGenerator[Channel, None]:
     """
-    Dependency that provides a RabbitMQ channel for a request.
-    Ensure the channel is closed afterward.
+    Provides a RabbitMQ channel for a request.
+    The caller is responsible for closing the channel.
     """
-    connection = await get_rabbitmq_connection()
-    channel = None
     try:
+        connection = await connect_robust(RABBITMQ_URL)
         channel = await connection.channel()
         await channel.set_qos(prefetch_count=1)
         print("RabbitMQ channel acquired.")
-        yield channel
+        return channel
     except Exception as e:
-        print(f"Error obtaining/using RabbitMQ channel: {e}")
+        print(f"Error obtaining RabbitMQ channel: {e}")
         raise MessagingError(f"Failed to get or use RabbitMQ channel: {e}")
-    finally:
-        if channel and not channel.is_closed:
-            await channel.close()
-            print("RabbitMQ channel closed.")
 
 
 async def declare_exchange(

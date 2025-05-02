@@ -1,8 +1,10 @@
+from shared.infrastructure.messaging import get_rabbitmq_channel
 from src.shared.domain.helpers import exit_json
 from src.users.application.use_cases.commands import RegisterUserUseCase
 from src.users.application.use_cases.queries import GetUserByIdUseCase
 from src.users.infraestructure.models import UserCreateModel, UserFindModel
 from src.users.infraestructure.repositories import UserRepository
+from users.infraestructure.messaging import UserCommandPublisher
 
 
 class UserServiceHandler:
@@ -11,12 +13,20 @@ class UserServiceHandler:
 
     async def register_user(self, data_user: UserCreateModel):
         try:
-            # Crear el caso de uso y ejecutarlo
             use_case = RegisterUserUseCase(self.user_repository)
             user = await use_case.execute(data_user)
 
             if user is None:
                 return exit_json(0, {"success": False, "message": "ERROR_REGISTER"})
+
+            channel = await get_rabbitmq_channel()
+            try:
+                publisher = UserCommandPublisher(channel)
+                await publisher.publish_create_user_command(data_user)
+            finally:
+                if channel and not channel.is_closed:
+                    await channel.close()
+                    print("RabbitMQ channel closed.")
 
             return exit_json(
                 1,

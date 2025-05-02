@@ -21,8 +21,8 @@ async def test():
 async def register_user(data_user: UserCreateModel, db=Depends(get_db_session)):
     try:
         service = UserServiceHandler(db)
-        user = await service.register_user(data_user)
-        return user
+        response = await service.register_user(data_user)
+        return response
     except DomainError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:

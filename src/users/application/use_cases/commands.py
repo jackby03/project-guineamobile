@@ -8,6 +8,10 @@ class RegisterUserUseCase:
         self.user_repository = user_repository
 
     async def execute(self, command: UserModel) -> User:
+        existing_user = await self.user_repository.get_user_by_email(command.email)
+        if existing_user:
+            raise ValueError("User with this email already exists.")
+
         new_user = User(name=command.name, email=command.email)
         new_user.set_password(command.password)
         saved_user = await self.user_repository.save_user(new_user)
