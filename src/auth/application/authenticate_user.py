@@ -5,7 +5,19 @@ from users.infraestructure.repositories import UserRepository
 
 
 class AuthenticateUserUseCase:
-    """Use case for authenticating a user based on credentials."""
+    """Use case for authenticating a user based on credentials.
+    This class handles user authentication by validating credentials and generating access tokens.
+    Attributes:
+        user_repository (UserRepository): Repository for user-related database operations.
+    Methods:
+        execute(request: AuthenticateUserRequest) -> dict:
+            Authenticates user credentials and generates an access token.
+    Returns:
+        dict: Contains the access token and token type if authentication is successful.
+            Format: {"access_token": str, "token_type": "bearer"}
+        AuthorizationError: When provided credentials are invalid.
+        EntityNotFoundError: When user with given email doesn't exist.
+    """
 
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository

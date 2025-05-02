@@ -8,6 +8,24 @@ class RegisterUserUseCase:
         self.user_repository = user_repository
 
     async def execute(self, command: UserModel) -> User:
+        """
+        Execute the user creation command.
+        This method creates a new user after verifying that no user exists with the given email.
+        The password is securely hashed before saving.
+        Args:
+            command (UserModel): The user data model containing name, email and password
+        Returns:
+            User: The newly created and saved user entity
+        Raises:
+            ValueError: If a user with the provided email already exists
+        Example:
+            user = await create_user.execute(UserModel(
+                name="John Doe",
+                email="john@example.com",
+                password="secret123"
+            ))
+        """
+
         existing_user = await self.user_repository.get_user_by_email(command.email)
         if existing_user:
             raise ValueError("User with this email already exists.")

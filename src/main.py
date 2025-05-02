@@ -13,6 +13,7 @@ app = FastAPI(
     description="API for managing users in the system.",
     version="1.0.0",
     docs_url="/docs" if settings.ENVIRONMENT == "development" else None,
+    redoc_url="/redoc" if settings.ENVIRONMENT == "development" else None,
 )
 
 # configuration of CORS
@@ -47,7 +48,30 @@ async def shutdown_event():
 # --- Exception Handlers ---
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    # Custom handler for Pydantic validation errors
+    """
+    Handle validation exceptions for FastAPI requests.
+    This async function serves as an exception handler for RequestValidationError,
+    returning a JSON response with validation error details.
+    Args:
+        request (Request): The incoming HTTP request object
+        exc (RequestValidationError): The validation exception that was raised
+    Returns:
+        JSONResponse: A response containing:
+            - status_code: 422 (HTTP_422_UNPROCESSABLE_ENTITY)
+            - content: Dictionary with 'detail' key containing validation errors
+    Example:
+        When invalid data is sent:
+        {
+            "detail": [
+                {
+                    "loc": ["body", "email"],
+                    "msg": "invalid email format",
+                    "type": "value_error"
+                }
+            ]
+        }
+    """
+
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={"detail": exc.errors()},

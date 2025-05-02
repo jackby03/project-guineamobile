@@ -19,6 +19,7 @@ dependencies = [
     "bcrypt<4.0.0",
     "pydantic-settings>=2.9.1",
     "jose>=1.0.0",
+    "pdoc>=15.0.3",
 ]
 
 [project.scripts]

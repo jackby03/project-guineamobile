@@ -33,9 +33,27 @@ async def get_current_user(
     user_repo: Annotated[UserRepository, Depends(get_user_repository)],
 ) -> UserModel:
     """
-    Dependency to get currnet authenticated user base on the token.
-    Decodes the token, retrieves the user ID, and fetches the user form the repository.
+    Dependency to get current authenticated user based on the token.
+    This function validates the provided JWT token, decodes it to extract user information,
+    and retrieves the corresponding user from the database.
+    Args:
+        token (str): JWT token obtained from the OAuth2 scheme dependency
+        user_repo (UserRepository): Repository instance for user-related database operations
+    Returns:
+        UserModel: The authenticated user model instance
+    Raises:
+        HTTPException: With 401 status code if:
+            - Token is invalid or cannot be decoded
+            - Token does not contain user ID in sub claim
+            - User ID format is invalid
+            - User not found in database
+    Example:
+        ```
+        @router.get("/me")
+        async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+            return current_user
     """
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

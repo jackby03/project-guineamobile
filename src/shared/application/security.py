@@ -26,7 +26,21 @@ ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create a JWT access token."""
+    """
+    Creates a JWT access token with given payload data and expiration time.
+    Args:
+        data (dict): The payload data to encode in the token. Must contain 'sub' field as string.
+        expires_delta (Optional[timedelta], optional): Custom expiration time delta.
+            If None, defaults to ACCESS_TOKEN_EXPIRE_MINUTES.
+    Returns:
+        str: The encoded JWT token string.
+    Raises:
+        ValueError: If 'sub' field is missing in data or not a string.
+    Example:
+        >>> data = {"sub": "user123", "role": "admin"}
+        >>> token = create_access_token(data)
+    """
+
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -41,7 +55,19 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 
 def decode_access_token(token: str) -> Optional[dict]:
-    """Decode a JWT access token."""
+    """
+    Decodes and validates a JWT access token.
+    Args:
+        token (str): The JWT token string to decode
+    Returns:
+        Optional[dict]: The decoded token payload as a dictionary if valid,
+                       or None if the token is invalid or expired
+    Details:
+        - Attempts to decode the JWT token using the configured secret key and algorithm
+        - Validates the token expiration time if present
+        - Returns None if token is invalid, expired or fails to decode
+    """
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         if "exp" in payload:

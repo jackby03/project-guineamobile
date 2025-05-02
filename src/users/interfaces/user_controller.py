@@ -19,6 +19,18 @@ async def test():
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register_user(data_user: UserCreateModel, db=Depends(get_db_session)):
+    """
+    Register a new user in the system.
+    Args:
+        data_user (UserCreateModel): User data model containing registration information.
+        db (Session, optional): Database session. Defaults to Depends(get_db_session).
+    Returns:
+        dict: Response containing the registered user information.
+    Raises:
+        HTTPException: 400 Bad Request if domain validation fails.
+        HTTPException: 500 Internal Server Error if an unexpected error occurs.
+    """
+
     try:
         service = UserServiceHandler(db)
         response = await service.register_user(data_user)
@@ -41,6 +53,18 @@ async def register_user(data_user: UserCreateModel, db=Depends(get_db_session)):
     responses={status.HTTP_404_NOT_FOUND: {"description": "User not found"}},
 )
 async def get_user_by_id(user_id: int, db=Depends(get_db_session)):
+    """
+    Retrieve a user by their ID from the database.
+    Args:
+        user_id (int): The unique identifier of the user to retrieve.
+        db (Session): Database session dependency.
+    Returns:
+        User: The user object if found.
+    Raises:
+        HTTPException:
+            - 404 Not Found if user doesn't exist
+            - 500 Internal Server Error if an unexpected error occurs
+    """
     try:
         service = UserServiceHandler(db)
         user = await service.get_user_by_id(user_id)

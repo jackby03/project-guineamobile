@@ -12,7 +12,22 @@ CREATE_USER_ROUTING_KEY = "user.command.create"
 
 
 async def process_create_user_message(message: AbstractIncomingMessage):
-    """Processes a message from the create_user_queue."""
+    """
+    Asynchronously processes a message to create a new user.
+    This function handles incoming messages containing user creation data. It decodes
+    the message payload, validates it against the UserCreateModel, and persists the
+    new user to the database.
+    Args:
+        message (AbstractIncomingMessage): The incoming message containing user creation data.
+            The message body should be UTF-8 encoded JSON that matches UserCreateModel schema.
+    Raises:
+        Exception: If any error occurs during message processing, decoding, validation
+            or database operations. The original exception is re-raised after logging.
+    Example:
+        >>> message = IncomingMessage(body=b'{"email": "user@example.com", ...}')
+        >>> await process_create_user_message(message)
+    """
+
     async with message.process():
         try:
             # Decode the message body
@@ -33,7 +48,16 @@ async def process_create_user_message(message: AbstractIncomingMessage):
 
 
 async def consume_create_user_commands():
-    """Sets up the RabbitMQ consumer for the create_user_queue."""
+    """
+    Establishes a connection to RabbitMQ and sets up a consumer for user creation commands.
+    This coroutine creates a robust connection to RabbitMQ, declares a direct exchange
+    and queue for handling user creation commands, and starts consuming messages.
+    The consumed messages are processed by the process_create_user_message callback.
+    Returns:
+        None
+    Raises:
+        aio_pika.exceptions.AMQPException: If connection or channel operations fail
+    """
     connection = await connect_robust(RABBITMQ_URL)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)

@@ -5,6 +5,20 @@ from src.users.interfaces import user_controller as user
 
 
 class RoutesManager:
+    """
+    A class that manages the routing configuration for FastAPI application.
+    This class is responsible for including different routers with their respective prefixes
+    and tags into the main FastAPI application.
+    Args:
+        app (FastAPI): The FastAPI application instance to which routes will be added.
+    Example:
+        ```python
+        app = FastAPI()
+        routes_manager = RoutesManager(app)
+        routes_manager.include_router()
+        ```
+    """
+
     def __init__(self, app: FastAPI):
         self.app = app
 

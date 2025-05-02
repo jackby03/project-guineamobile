@@ -10,12 +10,32 @@ class UserRepository(UserRepositoryInterface):
         self.db_session = db_session
 
     async def get_user_by_email(self, email: str) -> User:
+        """
+        Retrieves a user from the database by their email address.
+        Args:
+            email (str): The email address of the user to search for.
+        Returns:
+            User: The user object if found, None otherwise.
+        Raises:
+            SQLAlchemyError: If there is an error executing the database query.
+        """
+
         result = await self.db_session.execute(select(User).where(User.email == email))
         user = result.scalar_one_or_none()
         print(f"SQLAlchemy: Fetching user with email {email} from database.")
         return user
 
     async def get_user_by_id(self, user_id: int) -> User:
+        """
+        Retrieves a user from the database by their ID.
+        Args:
+            user_id (int): The unique identifier of the user to retrieve.
+        Returns:
+            User: The user object if found, None otherwise.
+        Raises:
+            NoResultFound: If no user exists with the given ID and scalar_one() is used.
+        """
+
         result = await self.db_session.execute(
             select(User).where(User.user_id == user_id)
         )
@@ -24,6 +44,16 @@ class UserRepository(UserRepositoryInterface):
         return user
 
     async def save_user(self, user: User) -> User:
+        """
+        Saves a user entity to the database.
+        Args:
+            user (User): The user entity to be saved in the database.
+        Returns:
+            User: The saved user entity with potentially updated fields (e.g., auto-generated IDs).
+        Raises:
+            SQLAlchemyError: If there's an error during database operation.
+        """
+
         self.db_session.add(user)
         await self.db_session.commit()
         print(f"SQLAlchemy: User {user.user_id} saved to database.")
