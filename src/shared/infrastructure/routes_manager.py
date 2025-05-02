@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from src.auth.interfaces import auth_controller as auth
 from src.users.interfaces import user_controller as user
 
 
@@ -9,3 +10,4 @@ class RoutesManager:
 
     def include_router(self):
         self.app.include_router(user.router, prefix="/users", tags=["users"])
+        self.app.include_router(auth.router, prefix="/auth", tags=["authentication"])

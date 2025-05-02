@@ -5,12 +5,11 @@ from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
-load_dotenv()
+from shared.configuration.config import settings
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DB_URI")
+SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 
 engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True, pool_pre_ping=True)
-
 
 AsyncSessionFactory = async_sessionmaker(
     bind=engine,
@@ -21,6 +20,8 @@ AsyncSessionFactory = async_sessionmaker(
 
 
 class Base(DeclarativeBase):
+    """Base class for SQLAlchemy models."""
+
     pass
 
 
@@ -32,8 +33,9 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionFactory() as session:
         try:
             yield session
-        except Exception:
+        except Exception as e:
             await session.rollback()
+            raise e
         finally:
             await session.close()
 

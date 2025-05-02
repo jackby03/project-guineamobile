@@ -1,13 +1,8 @@
-from sqlalchemy import Column, Integer, String
-
-from src.shared.infrastructure.database import Base
+from pydantic import BaseModel
 
 
-class Credential(Base):
-    __tablename__ = "tb_tokens"
+class Token(BaseModel):
+    """Domain representation of a token."""
 
-    credential_id: int = Column(
-        Integer, primary_key=True, index=True, autoincrement=True
-    )
-    access_token: str = Column(String, nullable=False)
+    access_token: str
     token_type: str = "bearer"

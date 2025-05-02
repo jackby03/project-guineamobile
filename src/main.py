@@ -1,10 +1,10 @@
-import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
 from starlette.responses import JSONResponse
 
+from shared.configuration.config import settings
+from shared.infrastructure.messaging import close_rabbitmq_connection
 from src.shared.infrastructure.database import close_db, init_db
 from src.shared.infrastructure.routes_manager import RoutesManager
 
@@ -12,6 +12,7 @@ app = FastAPI(
     title="User Service API",
     description="API for managing users in the system.",
     version="1.0.0",
+    docs_url="/docs" if settings.ENVIRONMENT == "development" else None,
 )
 
 # configuration of CORS
@@ -39,6 +40,7 @@ async def shutdown_event():
     print("Shutting down User Service application...")
     # Close database connections gracefully
     await close_db()
+    await close_rabbitmq_connection()
     print("Application shutdown complete.")
 
 
@@ -48,18 +50,22 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     # Custom handler for Pydantic validation errors
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"detail": exc.errors(), "body": exc.body},
+        content={"detail": exc.errors()},
     )
+
+
+# --- Include Routers ---
+routes_manager = RoutesManager(app)
+routes_manager.include_router()
 
 
 # --- Root Endpoint ---
 @app.get("/", include_in_schema=False)
 async def redirect_to_docs():
-    return RedirectResponse(url="/docs")
-
-
-routes_manager = RoutesManager(app)
-routes_manager.include_router()
-
-if __name__ == "__main__":
-    uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
+    """Root endpoint providing basic app info."""
+    return {
+        "message": "Welcome to the User Service API!",
+        "enviroment": settings.ENVIRONMENT,
+        "version": app.version,
+        "docs_url": app.docs_url,
+    }

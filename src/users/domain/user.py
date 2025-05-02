@@ -1,6 +1,7 @@
 from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String
 
+from shared.application.security import get_password_hash, verify_password
 from src.shared.infrastructure.database import Base
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -15,12 +16,10 @@ class User(Base):
     hashed_password: str = Column(String, nullable=False)
 
     def set_password(self, password: str):
-        """Set the password for the user."""
-        self.hashed_password = pwd_context.hash(password)
+        self.hashed_password = get_password_hash(password)
 
     def verify_password(self, password: str) -> bool:
-        """Verify the password for the user."""
-        return pwd_context.verify(password, self.hashed_password)
+        return verify_password(password, self.hashed_password)
 
     def __repr__(self):
         return f"UserMode(id={self.user_id}, email='{self.email}', name='{self.name}')>"

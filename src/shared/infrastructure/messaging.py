@@ -1,18 +1,14 @@
 import asyncio
-import os
 
 import aio_pika.exceptions
-from aio_pika import connect_robust
 from aio_pika.abc import AbstractRobustChannel, AbstractRobustConnection
-from dotenv import load_dotenv
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 from typing_extensions import AsyncGenerator, Optional, TypeAlias
 
+from shared.configuration.config import settings
 from src.shared.domain.base_errores import MessagingError
 
-load_dotenv()
-
-RABBITMQ_URL = os.getenv("RABBITMQ_URI")
+RABBITMQ_URL = settings.RABBITMQ_URL
 
 Channel: TypeAlias = AbstractRobustChannel
 
@@ -82,7 +78,7 @@ async def get_rabbitmq_channel() -> AsyncGenerator[Channel, None]:
     The caller is responsible for closing the channel.
     """
     try:
-        connection = await connect_robust(RABBITMQ_URL)
+        connection = await get_rabbitmq_connection()
         channel = await connection.channel()
         await channel.set_qos(prefetch_count=1)
         print("RabbitMQ channel acquired.")
@@ -164,7 +160,9 @@ async def setup_messaging_infrastructure(channel: Channel):
     await declare_exchange(
         channel, user_command_exchange, exchange_type="direct", durable=True
     )
+
     await declare_queue(channel, create_user_queue, durable=True)
+
     await bind_queue(
         channel, user_command_exchange, create_user_queue, create_user_routing_key
     )
