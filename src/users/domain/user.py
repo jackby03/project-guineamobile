@@ -22,4 +22,4 @@ class User(Base):
         return verify_password(password, self.hashed_password)
 
     def __repr__(self):
-        return f"UserMode(id={self.user_id}, email='{self.email}', name='{self.name}')>"
+        return f"UserMode(id={self.user_id}, email='{self.email}', name='{self.name}')"
