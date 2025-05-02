@@ -18,14 +18,6 @@ async def process_create_user_message(message: AbstractIncomingMessage):
     This function handles incoming messages containing user creation data. It decodes
     the message payload, validates it against the `UserCreateModel`, and persists the
     new user to the database.
-
-    Args:
-        message (AbstractIncomingMessage): The incoming message containing user creation data.
-            The message body should be UTF-8 encoded JSON that matches the `UserCreateModel` schema.
-
-    Raises:
-        Exception: If any error occurs during message processing, decoding, validation,
-            or database operations. The original exception is re-raised after logging.
     """
     async with message.process():
         try:
@@ -53,12 +45,6 @@ async def consume_create_user_commands():
     This coroutine creates a robust connection to RabbitMQ, declares a direct exchange
     and queue for handling user creation commands, and starts consuming messages.
     The consumed messages are processed by the `process_create_user_message` callback.
-
-    Returns:
-        None
-
-    Raises:
-        aio_pika.exceptions.AMQPException: If connection or channel operations fail.
     """
     connection = await connect_robust(RABBITMQ_URL)
     channel = await connection.channel()

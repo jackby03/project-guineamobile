@@ -1,5 +1,5 @@
-src.auth.infrastructure package
-===============================
+Authentication Infrastructure
+=============================
 
 Submodules
 ----------

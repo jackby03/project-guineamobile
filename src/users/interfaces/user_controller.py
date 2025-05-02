@@ -20,14 +20,6 @@ async def test():
     Health check endpoint for the User Service.
 
     This endpoint is used to verify that the User Service is running and accessible.
-
-    Returns:
-        dict: A dictionary containing a message indicating the service status.
-
-    Example:
-        >>> response = await test()
-        >>> print(response)
-        {"message": "User service is running"}
     """
     return {"message": "User service is running"}
 
@@ -44,24 +36,6 @@ async def register_user(data_user: UserCreateModel, db=Depends(get_db_session)):
 
     This endpoint handles user registration by validating the provided data and
     saving the user to the database.
-
-    Args:
-        data_user (UserCreateModel): The user data model containing registration details.
-        db: The database session dependency.
-
-    Returns:
-        dict: A dictionary containing the registration response.
-
-    Raises:
-        HTTPException:
-            - 400: If a domain error occurs during registration.
-            - 500: If an unexpected error occurs during registration.
-
-    Example:
-        >>> data_user = UserCreateModel(name="John Doe", email="john@example.com", password="securepassword")
-        >>> response = await register_user(data_user, db)
-        >>> print(response)
-        {"success": True, "message": "USER_REGISTERED", "data": {...}}
     """
     try:
         service = UserServiceHandler(db)

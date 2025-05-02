@@ -21,7 +21,7 @@ class Base(DeclarativeBase):
     """
     Base class for SQLAlchemy models.
 
-    This class serves as the base for all SQLAlchemy ORM models in the application.
+    This class serves as the base for all SQLAlchemy models in the application.
     It provides metadata and other shared functionality for database models.
     """
 

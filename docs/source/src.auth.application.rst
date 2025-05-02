@@ -1,21 +1,11 @@
-src.auth.application package
-============================
+Authentication Application Logic
+================================
 
-Submodules
-----------
 
-src.auth.application.authenticate\_user module
-----------------------------------------------
+Authenticate User Use Case
+---------------------------------------------
 
 .. automodule:: src.auth.application.authenticate_user
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-Module contents
----------------
-
-.. automodule:: src.auth.application
    :members:
    :show-inheritance:
    :undoc-members:

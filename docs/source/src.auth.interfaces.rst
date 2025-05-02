@@ -1,11 +1,11 @@
-src.auth.interfaces package
-===========================
+Authentication Interfaces
+==========================
 
 Submodules
 ----------
 
-src.auth.interfaces.auth\_controller module
--------------------------------------------
+src.auth.interfaces.auth_controller module
+------------------------------------------
 
 .. automodule:: src.auth.interfaces.auth_controller
    :members:

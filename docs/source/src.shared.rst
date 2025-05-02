@@ -1,11 +1,11 @@
-src.shared package
-==================
+Shared Components
+=================
 
 Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    src.shared.application
    src.shared.configuration

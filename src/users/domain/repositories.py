@@ -15,7 +15,7 @@ class UserRepositoryInterface(metaclass=ABCMeta):
     @abstractmethod
     async def get_user_by_id(self, user_id: int) -> User:
         """
-        Retrieve a user by their unique identifier.
+        Retrieve a user by their unique identifier.w
         """
         raise NotImplementedError
 

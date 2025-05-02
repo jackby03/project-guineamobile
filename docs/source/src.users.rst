@@ -1,11 +1,11 @@
-src.users package
-=================
+User Management Components
+==========================
 
 Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    src.users.application
    src.users.domain

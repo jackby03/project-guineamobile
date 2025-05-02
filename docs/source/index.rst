@@ -4,7 +4,11 @@ Welcome to Guinea's documentation!
 ===================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-   modules
+   src
+   src.auth
+   src.shared
+   src.users
+   sqlalchemy

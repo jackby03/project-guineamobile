@@ -1,11 +1,11 @@
-src.auth package
-================
+Authentication Components
+=========================
 
 Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    src.auth.application
    src.auth.domain

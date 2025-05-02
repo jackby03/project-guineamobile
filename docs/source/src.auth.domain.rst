@@ -1,5 +1,5 @@
-src.auth.domain package
-=======================
+Authentication Domain
+=====================
 
 Submodules
 ----------
@@ -20,8 +20,8 @@ src.auth.domain.token module
    :show-inheritance:
    :undoc-members:
 
-src.auth.domain.token\_data module
-----------------------------------
+src.auth.domain.token_data module
+---------------------------------
 
 .. automodule:: src.auth.domain.token_data
    :members:
