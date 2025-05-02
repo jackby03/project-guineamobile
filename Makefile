@@ -1,20 +1,26 @@
 # Minimal makefile for Sphinx documentation
-#
 
-# You can set these variables from the command line, and also
-# from the environment for the first two.
+# Variables configurables
 SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build
+SPHINXBUILD   = .venv\Scripts\sphinx-build
+SOURCEDIR     = docs/source
+BUILDDIR      = docs/build
 
-# Put it first so that "make" without argument is like "make help".
+# Ayuda: muestra las opciones disponibles
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+    @$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 .PHONY: help Makefile
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+# Objetivo principal: construir la documentación en HTML
+html:
+    @$(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
+
+# Limpiar los archivos generados
+clean:
+    @echo "Limpiando el directorio de construcción..."
+    @rm -rf "$(BUILDDIR)"
+
+# Catch-all target: redirige todos los objetivos desconocidos a Sphinx
 %: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+    @$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

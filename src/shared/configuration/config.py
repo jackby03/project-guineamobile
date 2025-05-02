@@ -9,16 +9,6 @@ class Settings(BaseSettings):
 
     This class defines the configuration settings for the application, including
     application-level settings, database connection details, and RabbitMQ configuration.
-
-    Attributes:
-        APP_NAME (str): The name of the application.
-        ENVIRONMENT (str): The environment in which the application is running (e.g., development, production).
-        SECRET_KEY (str): The secret key used for cryptographic operations.
-        ALGORITM (str): The algorithm used for JWT encoding/decoding.
-        ACCESS_TOKEN_EXPIRE_MINUTES (int): The expiration time for access tokens in minutes.
-        DATABASE_URL (str): The database connection URL.
-        RABBITMQ_URL (str): The RabbitMQ connection URL.
-        model_config (SettingsConfigDict): Configuration for loading settings from an `.env` file.
     """
 
     # Application settings
@@ -47,9 +37,6 @@ def get_settings() -> Settings:
 
     This function returns a cached instance of the `Settings` class, ensuring
     that the settings are loaded only once during the application's lifecycle.
-
-    Returns:
-        Settings: The application settings instance.
     """
     return Settings()
 

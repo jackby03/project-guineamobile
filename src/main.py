@@ -35,9 +35,6 @@ async def startup_event():
 
     This function is executed when the application starts. It initializes
     the database connection and performs any necessary setup.
-
-    Returns:
-        None
     """
     print("Starting up User Service application...")
     await init_db()
@@ -51,9 +48,6 @@ async def shutdown_event():
 
     This function is executed when the application shuts down. It closes
     database connections and other resources gracefully.
-
-    Returns:
-        None
     """
     print("Shutting down User Service application...")
     await close_db()
@@ -69,27 +63,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
     This function serves as an exception handler for `RequestValidationError`,
     returning a JSON response with validation error details.
-
-    Args:
-        request (Request): The incoming HTTP request object.
-        exc (RequestValidationError): The validation exception that was raised.
-
-    Returns:
-        JSONResponse: A response containing:
-            - status_code: 422 (HTTP_422_UNPROCESSABLE_ENTITY).
-            - content: Dictionary with 'detail' key containing validation errors.
-
-    Example:
-        When invalid data is sent:
-        {
-            "detail": [
-                {
-                    "loc": ["body", "email"],
-                    "msg": "invalid email format",
-                    "type": "value_error"
-                }
-            ]
-        }
     """
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -110,9 +83,6 @@ async def redirect_to_docs():
 
     This endpoint returns basic information about the application, including
     the environment, version, and documentation URL.
-
-    Returns:
-        dict: A dictionary containing app information.
     """
     return {
         "message": "Welcome to the User Service API!",

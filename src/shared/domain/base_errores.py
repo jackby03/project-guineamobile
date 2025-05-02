@@ -4,17 +4,11 @@ class ApplicationError(Exception):
     Base class for application-specific errors.
 
     This exception serves as the root for all custom exceptions in the application.
-
-    Attributes:
-        message (str): A descriptive message for the error.
     """
 
     def __init__(self, message: str = "An unexpected error occurred."):
         """
         Initializes the ApplicationError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "An unexpected error occurred."
         """
         self.message = message
         super().__init__(message)
@@ -31,9 +25,6 @@ class DomainError(ApplicationError):
     def __init__(self, message: str = "A domain error occurred."):
         """
         Initializes the DomainError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "A domain error occurred."
         """
         super().__init__(message)
 
@@ -48,9 +39,6 @@ class EntityNotFoundError(DomainError):
     def __init__(self, message: str = "Entity not found."):
         """
         Initializes the EntityNotFoundError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "Entity not found."
         """
         super().__init__(message)
 
@@ -66,9 +54,6 @@ class ApplicationServiceError(ApplicationError):
     def __init__(self, message: str = "An application service error occurred."):
         """
         Initializes the ApplicationServiceError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "An application service error occurred."
         """
         super().__init__(message)
 
@@ -83,9 +68,6 @@ class AuthorizationError(ApplicationError):
     def __init__(self, message: str = "Action not authorized."):
         """
         Initializes the AuthorizationError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "Action not authorized."
         """
         super().__init__(message)
 
@@ -101,9 +83,6 @@ class InfrastructureError(ApplicationError):
     def __init__(self, message: str = "An infrastructure error occurred."):
         """
         Initializes the InfrastructureError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "An infrastructure error occurred."
         """
         super().__init__(message)
 
@@ -118,8 +97,5 @@ class MessagingError(InfrastructureError):
     def __init__(self, message: str = "A messaging error occurred."):
         """
         Initializes the MessagingError.
-
-        Args:
-            message (str): A descriptive message for the error. Defaults to "A messaging error occurred."
         """
         super().__init__(message)

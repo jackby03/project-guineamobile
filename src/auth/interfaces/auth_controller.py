@@ -26,22 +26,6 @@ async def login_for_access_token(
 
     This endpoint handles user authentication using the OAuth2 password flow. It validates
     the provided credentials and returns a JWT token if successful.
-
-    Args:
-        form_data (OAuth2PasswordRequestForm): The OAuth2 form containing username and password.
-        authenticate_use_case (AuthenticateUser): Use case for handling user authentication.
-
-    Returns:
-        TokenModel: Contains the access token and token type if authentication is successful.
-
-    Raises:
-        HTTPException:
-            - 401: If credentials are invalid.
-            - 500: If an unexpected error occurs during authentication.
-
-    Example:
-        >>> form_data = OAuth2PasswordRequestForm(username="user@example.com", password="securepassword")
-        >>> token = await login_for_access_token(form_data, authenticate_use_case)
     """
     auth_request = AuthenticateUserRequest(
         username=form_data.username,

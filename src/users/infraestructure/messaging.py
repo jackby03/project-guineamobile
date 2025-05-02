@@ -14,17 +14,11 @@ class UserCommandPublisher:
     This class is responsible for sending messages to the RabbitMQ exchange
     for user commands, specifically the command to create a new user.
     It uses the aio-pika library for asynchronous communication with RabbitMQ.
-
-    Attributes:
-        channel (AbstractRobustChannel): The RabbitMQ channel used for publishing messages.
     """
 
     def __init__(self, channel: AbstractRobustChannel):
         """
         Initializes the UserCommandPublisher.
-
-        Args:
-            channel (AbstractRobustChannel): The RabbitMQ channel used for publishing messages.
         """
         self.channel = channel
 
@@ -35,15 +29,6 @@ class UserCommandPublisher:
         This method takes a `UserCreateModel` command object, serializes it to JSON,
         and publishes it to RabbitMQ using the default exchange and specified routing key.
         The message is marked as persistent with delivery mode 2.
-
-        Args:
-            command (UserCreateModel): The user creation command model containing user details.
-
-        Returns:
-            None
-
-        Raises:
-            AMQPError: If there is an error publishing to RabbitMQ.
         """
         message_body = command.model_dump_json().encode("utf-8")
 

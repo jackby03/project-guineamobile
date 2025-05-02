@@ -21,7 +21,7 @@ class UserRepository(UserRepositoryInterface):
         Initializes the UserRepository with a database session.
 
         Args:
-            db_session (AsyncSession): The SQLAlchemy asynchronous session used for database operations.
+            db_session (AsyncSession): The SQLAlchemy asynchronous session used for database operations. :no-index:
         """
         self.db_session = db_session
 
@@ -30,7 +30,7 @@ class UserRepository(UserRepositoryInterface):
         Retrieves a user from the database by their email address.
 
         Args:
-            email (str): The email address of the user to search for.
+            email (str): The email address of the user to search for. :no-index:
 
         Returns:
             User: The user object if found, or `None` if no user exists with the given email.
@@ -48,7 +48,7 @@ class UserRepository(UserRepositoryInterface):
         Retrieves a user from the database by their ID.
 
         Args:
-            user_id (int): The unique identifier of the user to retrieve.
+            user_id (int): The unique identifier of the user to retrieve. :no-index:
 
         Returns:
             User: The user object if found, or `None` if no user exists with the given ID.
@@ -66,15 +66,6 @@ class UserRepository(UserRepositoryInterface):
     async def save_user(self, user: User) -> User:
         """
         Saves a user entity to the database.
-
-        Args:
-            user (User): The user entity to be saved in the database.
-
-        Returns:
-            User: The saved user entity with potentially updated fields (e.g., auto-generated IDs).
-
-        Raises:
-            SQLAlchemyError: If there's an error during the database operation.
         """
         self.db_session.add(user)
         await self.db_session.commit()

@@ -90,24 +90,6 @@ async def get_user_by_id(user_id: int, db=Depends(get_db_session)):
     Retrieves a user by their unique identifier.
 
     This endpoint fetches a user from the database based on the provided user ID.
-
-    Args:
-        user_id (int): The unique identifier of the user to retrieve.
-        db: The database session dependency.
-
-    Returns:
-        dict: A dictionary containing the user details.
-
-    Raises:
-        HTTPException:
-            - 404: If the user is not found.
-            - 500: If an unexpected error occurs during retrieval.
-
-    Example:
-        >>> user_id = 1
-        >>> response = await get_user_by_id(user_id, db)
-        >>> print(response)
-        {"user_id": 1, "name": "John Doe", "email": "john@example.com"}
     """
     try:
         service = UserServiceHandler(db)

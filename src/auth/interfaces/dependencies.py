@@ -19,12 +19,6 @@ def get_authenticate_user_use_case(
 ) -> AuthenticateUserUseCase:
     """
     Dependency injection for the AuthenticateUserUseCase.
-
-    Args:
-        user_repo (UserRepository): Repository instance for user-related database operations.
-
-    Returns:
-        AuthenticateUserUseCase: An instance of the AuthenticateUser use case.
     """
     return AuthenticateUserUseCase(user_repo)
 
@@ -43,27 +37,6 @@ async def get_current_user(
 
     This function validates the provided JWT token, decodes it to extract user information,
     and retrieves the corresponding user from the database.
-
-    Args:
-        token (str): JWT token obtained from the OAuth2 scheme dependency.
-        user_repo (UserRepository): Repository instance for user-related database operations.
-
-    Returns:
-        UserModel: The authenticated user model instance.
-
-    Raises:
-        HTTPException: With 401 status code if:
-            - Token is invalid or cannot be decoded.
-            - Token does not contain user ID in the `sub` claim.
-            - User ID format is invalid.
-            - User not found in the database.
-
-    Example:
-        ```python
-        @router.get("/me")
-        async def read_users_me(current_user: Annotated[UserModel, Depends(get_current_user)]):
-            return current_user
-        ```
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -100,9 +73,6 @@ Annotated type for injecting the OAuth2 token dependency.
 
 This annotation is used in FastAPI endpoints to automatically resolve and inject
 the JWT token from the request headers.
-
-Type:
-    Annotated[str, Depends(oauth2_scheme)]
 """
 
 Current_user = Annotated[UserModel, Depends(get_current_user)]
@@ -111,7 +81,4 @@ Annotated type for injecting the current authenticated user dependency.
 
 This annotation is used in FastAPI endpoints to automatically resolve and inject
 the authenticated user model instance.
-
-Type:
-    Annotated[UserModel, Depends(get_current_user)]
 """

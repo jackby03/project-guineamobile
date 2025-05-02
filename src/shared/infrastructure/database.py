@@ -34,12 +34,6 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
 
     This function is used as a dependency in FastAPI to provide a database session
     for each request. It ensures that the session is properly closed after the request.
-
-    Yields:
-        AsyncSession: The SQLAlchemy asynchronous session.
-
-    Raises:
-        Exception: If an error occurs during the session lifecycle.
     """
     async with AsyncSessionFactory() as session:
         try:
@@ -58,12 +52,6 @@ async def db_session_manager() -> AsyncGenerator[AsyncSession, None]:
 
     This function is useful for scenarios where a database session is needed
     outside the context of FastAPI's dependency injection system.
-
-    Yields:
-        AsyncSession: The SQLAlchemy asynchronous session.
-
-    Raises:
-        Exception: If an error occurs during the session lifecycle.
     """
     async with AsyncSessionFactory() as session:
         try:
@@ -82,9 +70,6 @@ async def init_db():
     This function initializes the database by creating tables if they don't exist.
     It is primarily used for development or testing purposes. In production, use
     Alembic migrations for database schema management.
-
-    Raises:
-        Exception: If the database connection or table creation fails.
     """
     print("Database connection initialized.")
     try:
